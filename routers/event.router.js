@@ -29,11 +29,17 @@ eventRouter.get('/', async (req, res) => {
 eventRouter.put('/:eventId', async (req, res) => {
   try {
     const event = await updateEvent(req.params.eventId, req.body);
-    res.json({ message: "Event updated successfully", data: event });
+    if (event) {
+      res.json({ message: "Event updated successfully", data: event });
+    } else {
+      res.status(404).json({ message: "Event not found" });
+    }
   } catch (error) {
-    res.status(400).json({ message: "Error updating event", error });
+    console.error(error);
+    res.status(500).json({ message: "Error updating event", error: error.message });
   }
 });
+
 
 eventRouter.delete('/:eventId', async (req, res) => {
   try {
