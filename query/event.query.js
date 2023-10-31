@@ -31,12 +31,19 @@ const deleteEvent = async (eventId) => {
 
 const updateEvent = async (eventId, eventData) => {
   try {
-    await Event.findByIdAndUpdate(eventId, eventData, { new: true });
-    return await Event.find({});
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, eventData, { new: true });
+
+    if (!updatedEvent) {
+      // Event not found, return null
+      return null;
+    }
+
+    return updatedEvent;
   } catch (error) {
     console.error(error);
     throw error;
   }
-}
+};
+
 
 module.exports = { addEvent, updateEvent, deleteEvent, getAllEvents };
